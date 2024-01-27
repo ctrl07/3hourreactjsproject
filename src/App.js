@@ -1,24 +1,28 @@
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
+import Form from './Components/form/Form';
+import ItemList from './Components/form/ItemList';
+import Card from './Components/UI/Card';
 
 function App() {
+
+  const [itemList, setItemList]= useState([]);
+
+  const addProductHandler = (item)=>{
+    setItemList([...itemList, item]);
+    localStorage.setItem(item.id, JSON.stringify(item));
+  }
+
+  const deleteProductHandler=(itemId)=>{
+    let newProductList= itemList.filter(ele=> ele.id !==itemId);
+    setItemList([...newProductList]);  
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Card>
+     <Form onAddProduct={addProductHandler}/>
+     <ItemList items={itemList} onDeleteProduct={deleteProductHandler}/>
+    </Card>
   );
 }
 
